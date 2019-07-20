@@ -12,19 +12,22 @@ import pandas as pd
 import seaborn as sns
 
 ## Read data from CSV
-
 # Read CSV into pandas
 #csv_df = pd.read_csv("solr1.csv")
 csv_df = pd.read_csv("foundriports.csv")
+csv_gn = pd.read_csv("gdeltnews.csv")
 
 ## Filter Heliports
 csv_df = csv_df[~csv_df['Title'].str.contains('heliport', case=False)]
 
+## Join DataFrames
+csv_df = pd.merge(csv_df, csv_gn, on='Title', how='left')
 
-# Parse columns 'location' and 'FIM_EnName' from CSV
+# Parse columns 'location' and 'Title' and 'FIM_EnName' from CSV
 locations = csv_df['location']
 names     = csv_df['Title']
 #names     = csv_df['FIM_EnName']
+WebPageAddress = csv_df['WebPageAddress']
 
 ## Clean the data into array of float pairs
 
@@ -71,7 +74,7 @@ m = folium.Map()
 ## Adding markers to map
 
 # Convert to list of lat,long, name tuples
-markers = list(zip(latitudes, longitudes, names))
+markers = list(zip(latitudes, longitudes, names, WebPageAddress))
 markers = np.array(markers)
 markers
 
@@ -80,7 +83,9 @@ markers
 for i in markers:
   coords = i[:2]
   title  = i[2]
-  folium.Marker(location=coords, popup=title).add_to(m)
+  webaddress = i[3]
+  #folium.Marker(location=coords, popup=title).add_to(m)
+  folium.Marker(location=coords, popup=(title,webaddress)).add_to(m)
   
 # m
 
