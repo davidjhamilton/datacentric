@@ -17,7 +17,7 @@ import seaborn as sns
 #csv_df = pd.read_csv("solr1.csv")
 csv_df = pd.read_csv("foundriports.csv")
 
-# filter Heliports
+## Filter Heliports
 csv_df = csv_df[~csv_df['Title'].str.contains('heliport', case=False)]
 
 
@@ -66,7 +66,7 @@ sns.jointplot(latitudes, longitudes) \
 # https://www.kaggle.com/daveianhickey/how-to-folium-for-maps-heatmaps-time-data
 
 m = folium.Map()
-m
+# m
 
 ## Adding markers to map
 
@@ -82,7 +82,7 @@ for i in markers:
   title  = i[2]
   folium.Marker(location=coords, popup=title).add_to(m)
   
-m
+# m
 
 ## Adding heatmap layer
 HeatMap(markers[:,:2]).add_to(m)
